@@ -1,0 +1,25 @@
+<button id="logout">退出</button>
+<h1>用户信息</h1>
+<p id="welcome">Your r welcome <span id="account-name">...</span> </p>
+<script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var acountName = $('#account-name')
+		$.ajax('/userinfo', {
+			type: 'GET',
+			success: function(res) {
+				if(res && res.success) {
+					acountName.text(res.user.name)
+				}
+			}
+		})
+		// 退出
+		$('#logout').on('click', function() {
+			$.get('/logout',function(res) {
+				if(res && res.success) {
+					window.location.href = 'http://localhost:3000'
+				}
+			})
+		})
+	})
+</script>
