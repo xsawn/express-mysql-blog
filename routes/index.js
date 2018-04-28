@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-var loginInfo = null;
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'blog' });
@@ -15,14 +14,15 @@ router.post('/login', function(req, res, next) {
 	let params = req.body; console.log(req.body)
 	if(params.account === 'shawn') {
 		console.log('登陆成功，欢迎', params.account);
-		loginInfo = {
+		let loginInfo = {
 			isLogin: true,
 			account: params.account
 		}
+		req.session.loginInfo = loginInfo;
 		let resData = {
 			success: true,
 		}
-		res.cookie('account', 'shawn')
+		res.cookie('account', 'shawn', {signed: true})
 		res.send(resData)
 	} else {
 		res.send({
@@ -36,14 +36,15 @@ router.post('/login', function(req, res, next) {
 });
 
 router.get('/user', function(req, res, next) {
-	if(loginInfo) {
+	if(req.session.loginInfo) {
 		res.render('user')
 	} else {
 		res.redirect('/login')
 	}
 });
 router.get('/userinfo', function(req, res, next) {
-	if(loginInfo) {
+	let loginInfo = req.session.loginInfo
+	if(loginInfo) { console.log('GET /userinfo 已登录,欢迎：', loginInfo.account)
 		let resData = {
 							success: true,
 							user: {name: loginInfo.account}
@@ -57,7 +58,7 @@ router.get('/userinfo', function(req, res, next) {
 
 // 退出
 router.get('/logout', function(req, res, next){
-	loginInfo = null;
+	req.session.user = null;
 	// res.redirect('/')
 	res.send({success: true})
 })

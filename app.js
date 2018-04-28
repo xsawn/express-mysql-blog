@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
@@ -18,9 +19,25 @@ app.set('view engine', 'hbs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('shawnblog'));
+app.use(session({
+	secret: 'shawnblog', 
+	resave: true,
+ 	saveUninitialized:true
+
+}))
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(function (req, res, next) {
+	console.log('normal cookie', req.cookies.account)
+	console.log('signed cookie', req.signedCookies.account)
+	console.log('req.secret::', req.secret)
+	console.log('打印cookie中间件')
+	console.log('session 信息', req.session)
+	next()
+
+	// body...
+})
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
