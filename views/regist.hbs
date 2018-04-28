@@ -1,29 +1,28 @@
-<h1>用户登陆</h1>
-<form id="login-form" action="/login" method="POST">
+<h1>用户注册</h1>
+<form id="regist-form" action="/regist" method="POST">
 	<div>	
 		<label>account</label>
 		<input type="text" name="account"/>
 	</div>
-	<div><input id="submit-btn" type="submit" name="submit" value="登陆"/></div>
-	<p id="tip" style="display: none;">登陆失败</p>
+	<div><input id="submit-btn" type="submit" name="submit" value="注册"/></div>
+	<p id="tip" style="display: none;">注册失败</p>
 </form>
 <script type="text/javascript" src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.js"></script>
 <script type="text/javascript">
 	$(function() {
-		var submitBtn = $('#submit-btn');
-		var form = $('#login-form');
+		var form = $('#regist-form');
 		var tip = $('#tip')
 
 		form.on('submit', function(e) {
 			tip.hide() //
-			e.preventDefault()
+			e.preventDefault();
 			$.ajax({
-				url: '/login', 
+				url: '/regist',
 				type: 'POST',
-				data: $('#login-form').serialize(),
+				data: $('#regist-form').serialize(),
 				success: function(res) {
 					if(res && res.success) {
-						window.location.href = 'http://localhost:3000/user'
+						window.location.href = 'http://localhost:3000/'
 					} else {
 						tip.show()
 					}
