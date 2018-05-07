@@ -1,8 +1,12 @@
 <h1>用户登陆</h1>
 <form id="login-form" action="/login" method="POST">
 	<div>	
-		<label>account</label>
+		<label>账号</label>
 		<input type="text" name="account"/>
+	</div>
+	<div>	
+		<label>密码</label>
+		<input type="password" name="psd"/>
 	</div>
 	<div><input id="submit-btn" type="submit" name="submit" value="登陆"/></div>
 	<p id="tip" style="display: none;">登陆失败</p>
@@ -23,9 +27,11 @@
 				data: $('#login-form').serialize(),
 				success: function(res) {
 					if(res && res.success) {
+					console.log(res)
 						window.location.href = 'http://localhost:3000/user'
 					} else {
-						tip.show()
+
+						tip.text(res.message).show()
 					}
 				}
 			})

@@ -1,8 +1,12 @@
 <h1>用户注册</h1>
 <form id="regist-form" action="/regist" method="POST">
 	<div>	
-		<label>account</label>
+		<label>账号</label>
 		<input type="text" name="account"/>
+	</div>
+	<div>	
+		<label>密码</label>
+		<input type="password" name="psd"/>
 	</div>
 	<div><input id="submit-btn" type="submit" name="submit" value="注册"/></div>
 	<p id="tip" style="display: none;">注册失败</p>
@@ -24,7 +28,7 @@
 					if(res && res.success) {
 						window.location.href = 'http://localhost:3000/'
 					} else {
-						tip.show()
+						tip.text(res.message).show()
 					}
 				}
 			})

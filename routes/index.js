@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var DB = require('../info/users');
+var myConnect = require('../info/users');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -13,29 +13,7 @@ router.get('/login', function(req, res, next) {
 });
 
 router.post('/login', function(req, res, next) {
-	let params = req.body; console.log('请求体：', req.body)
-	if(DB.exist(params.account)){
-		console.log('登陆成功，欢迎', params.account);
-		let loginInfo = {
-			isLogin: true,
-			account: params.account
-		}
-		req.session.loginInfo = loginInfo;
-		let resData = {
-			success: true,
-		}
-		res.cookie('account', params.account, {signed: true})
-		res.send(resData)
-		// res.redirect('/user')
-	} else {
-		res.send({
-			success: false,
-			message: 'not regist'
-		})
-	}
-
-	
-  // res.render('login', { title: 'login' });
+	myConnect.login(req, res)
 });
 
 /* userInfo */
@@ -48,7 +26,8 @@ router.get('/user', function(req, res, next) {
 });
 router.get('/userinfo', function(req, res, next) {
 	let loginInfo = req.session.loginInfo
-	if(loginInfo) { console.log('GET /userinfo 已登录,欢迎：', loginInfo.account)
+	if(loginInfo) { 
+		console.log('GET /userinfo 已登录,欢迎：', loginInfo.account)
 		let resData = {
 							success: true,
 							user: {name: loginInfo.account}
@@ -73,18 +52,7 @@ router.get('/regist', function(req, res, next) {
 });
 
 router.post('/regist', function(req, res, next) {
-	let params = req.body; console.log(req.body)
-	if(DB.exist(params.account)) {
-		let resData = {
-			success: false,
-			message: 'user exist!',
-		}
-		res.send(resData)
-	} else {
-		DB.insert({account: params.account})
-		// res.redirect('/login')
-		res.send({success: true})
-	}
+	myConnect.regist(req, res)
 });
 
 
